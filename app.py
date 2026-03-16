@@ -27,6 +27,7 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
+# ── Guess History sidebar (Challenge 2) ───────────────────────────────────────
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
@@ -42,12 +43,29 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if st.session_state.history:
+    st.sidebar.divider()
+    st.sidebar.subheader("📋 Guess History")
+    secret = st.session_state.secret
+    for i, g in enumerate(st.session_state.history, start=1):
+        if not isinstance(g, int):
+            st.sidebar.caption(f"#{i}: {g} ❌ (invalid)")
+        elif g == secret:
+            st.sidebar.caption(f"#{i}: {g} 🎯 Correct!")
+        elif g > secret:
+            distance = g - secret
+            heat = "🔥" if distance <= 5 else ("🌡️" if distance <= 15 else "🧊")
+            st.sidebar.caption(f"#{i}: {g} {heat} Too High")
+        else:
+            distance = secret - g
+            heat = "🔥" if distance <= 5 else ("🌡️" if distance <= 15 else "🧊")
+            st.sidebar.caption(f"#{i}: {g} {heat} Too Low")
+
+# ── Main game area ─────────────────────────────────────────────────────────────
 st.subheader("Make a guess")
 
-st.info(
-    f"Guess a number between 1 and 100. "
-    f"Attempts left: {attempt_limit - st.session_state.attempts}"
-)
+attempts_left = attempt_limit - st.session_state.attempts + 1
+st.info(f"Guess a number between **{low}** and **{high}**.  Attempts left: **{attempts_left}**")
 
 with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
@@ -97,11 +115,28 @@ if submit:
         st.session_state.history.append(guess_int)
 
         secret = st.session_state.secret
-
         outcome, message = check_guess(guess_int, secret)
 
+        # ── Color-coded hints (Challenge 4) ───────────────────────────────────
         if show_hint:
-            st.warning(message)
+            if outcome == "Win":
+                st.success(message)
+            elif outcome == "Too High":
+                distance = guess_int - secret
+                if distance <= 5:
+                    st.warning(f"🔥 So close! {message}")
+                elif distance <= 15:
+                    st.warning(f"🌡️ Getting warmer. {message}")
+                else:
+                    st.info(f"🧊 Way off. {message}")
+            else:
+                distance = secret - guess_int
+                if distance <= 5:
+                    st.warning(f"🔥 So close! {message}")
+                elif distance <= 15:
+                    st.warning(f"🌡️ Getting warmer. {message}")
+                else:
+                    st.info(f"🧊 Way off. {message}")
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -116,6 +151,17 @@ if submit:
                 f"You won! The secret was {st.session_state.secret}. "
                 f"Final score: {st.session_state.score}"
             )
+            # Session summary table
+            st.subheader("📊 Session Summary")
+            st.table({
+                "Stat": ["Secret Number", "Attempts Used", "Final Score", "Difficulty"],
+                "Value": [
+                    st.session_state.secret,
+                    st.session_state.attempts,
+                    st.session_state.score,
+                    difficulty,
+                ],
+            })
         else:
             if st.session_state.attempts >= attempt_limit:
                 st.session_state.status = "lost"

@@ -29,3 +29,15 @@ Streamlit reruns the entire Python script from top to bottom every single time t
 ## 5. Looking ahead: your developer habits
 
 One habit I want to reuse is running the test suite immediately after every change, even small ones - it caught the tuple vs. string mismatch right away instead of letting it hide. Next time I work with AI on a coding task, I would read AI-generated test assertions more carefully before trusting them, since the AI confidently wrote tests that looked correct but were comparing incompatible types. This project changed how I think about AI-generated code: it can produce plausible-looking code that compiles and runs but contains subtle logic errors, so treating AI output as a first draft to verify rather than a finished answer is the right mindset.
+
+---
+
+## 6. AI Model Comparison (Challenge 5)
+
+**Bug tested:** The swapped Higher/Lower hints in `check_guess` — `guess > secret` returning "Go HIGHER!" instead of "Go LOWER!".
+
+**Claude Code (Anthropic)** identified the bug immediately by reading the conditional logic and explaining that if the guess is already above the secret the player needs to guess *lower*, not higher. It pointed directly to lines 37–40, showed the corrected version, and explained *why* the messages were wrong in one sentence before making the edit.
+
+**ChatGPT (GPT-4o)** also found the correct fix but framed its response around a general explanation of how number-guessing hint logic works before getting to the specific lines. The fix itself was identical, but it took more reading to extract the actual change — it added a paragraph about "common AI coding mistakes" that wasn't directly useful.
+
+**Verdict:** Both models produced the correct fix. Claude Code was more readable because it led with the change rather than the explanation, and it cited the exact line numbers. ChatGPT's explanation of *why* the bug is a common AI mistake was more thorough, which is useful if you're trying to understand the pattern rather than just fix this one instance.
