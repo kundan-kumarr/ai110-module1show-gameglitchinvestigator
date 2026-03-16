@@ -51,19 +51,19 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 🚀 Stretch Features
 
-### ✅ Challenge 1 — Advanced Edge-Case Testing
+### Challenge 1 — Advanced Edge-Case Testing
 Added 7 new pytest cases covering negative numbers, decimals (truncation), extremely large values, empty string, `None`, non-numeric strings, and whitespace-only input. All 10 tests pass (`python -m pytest tests/ -v`).
 
-### ✅ Challenge 2 — Feature Expansion: Guess History Sidebar
+### Challenge 2 — Feature Expansion: Guess History Sidebar
 Added a live **Guess History** panel in the sidebar that shows every guess with a hot/cold emoji indicator (🔥 within 5, 🌡️ within 15, 🧊 beyond 15) so players can visualize how close their previous guesses were without needing the debug panel.
 
-### ✅ Challenge 3 — Professional Documentation and Linting
+### Challenge 3 — Professional Documentation and Linting
 Added full Google-style docstrings to every function in `logic_utils.py`, including `Args`, `Returns`, and `Examples` sections. All functions follow PEP 8 naming and formatting conventions.
 
-### ✅ Challenge 4 — Enhanced Game UI
+### Challenge 4 — Enhanced Game UI
 - Color-coded hints: 🔥/🌡️/🧊 "hot-cold" feedback based on distance from the secret number.
 - `st.success` / `st.warning` / `st.info` used to color the hint box green/yellow/blue.
 - Session summary table on win showing secret number, attempts used, final score, and difficulty.
 
-### ✅ Challenge 5 — AI Model Comparison
+### Challenge 5 — AI Model Comparison
 Compared Claude Code vs. ChatGPT on the Higher/Lower hint bug fix — see the new **Section 6** in `reflection.md` for the full write-up.
