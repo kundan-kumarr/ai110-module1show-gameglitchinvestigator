@@ -25,13 +25,26 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Game purpose:** A number guessing game where the player tries to guess a secret number within a limited number of attempts. The game gives Higher/Lower hints after each guess and tracks a score across attempts. Difficulty levels (Easy, Normal, Hard) change the number range and attempt limit.
+
+**Bugs found:**
+- The Higher/Lower hints were reversed — "Go HIGHER!" showed when the guess was too high, and "Go LOWER!" when too low.
+- On every even-numbered attempt, the secret was silently cast to a `str`, causing numeric comparisons to fail and hints to be wrong.
+- The "New Game" button appeared to work but the game stayed stuck after a win or loss because `st.session_state.status` was never reset to `"playing"`.
+- All logic functions were missing from `logic_utils.py` (stubs raised `NotImplementedError`).
+
+**Fixes applied:**
+- Swapped the hint messages in `check_guess` so `guess > secret` → "Go LOWER!" and `guess < secret` → "Go HIGHER!".
+- Removed the even/odd attempt branching that cast the secret to a string.
+- Added `st.session_state.status = "playing"` (plus `history` and `score` resets) to the New Game handler.
+- Moved all four logic functions (`get_range_for_difficulty`, `parse_guess`, `check_guess`, `update_score`) into `logic_utils.py` and imported them in `app.py`.
+- Fixed the pytest tests to unpack the `(outcome, message)` tuple returned by `check_guess`.
 
 ## 📸 Demo
 
-- [ ] [Insert a screenshot of your fixed, winning game here]
+![Gameplay screenshot 1](images/1.png)
+![Gameplay screenshot 2](images/2.png)
+![Winning game screenshot](images/3.png)
 
 ## 🚀 Stretch Features
 
